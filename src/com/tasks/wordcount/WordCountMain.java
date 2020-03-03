@@ -1,10 +1,11 @@
 package com.tasks.wordcount;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class WordCountMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         File resourceFile = new File("src/com/tasks/wordcount/storage/text.txt");
         String filePath = resourceFile.getAbsolutePath();
 
