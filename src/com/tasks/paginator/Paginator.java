@@ -7,19 +7,19 @@ public class Paginator<T> {
     protected int pageSize;
     protected List<T> elements;
 
-    Paginator(List<T> elements, int pageSIze) {
+    Paginator(List<T> elements, int pageSize) {
         this.elements = elements;
 
-        if (pageSIze < 1) {
-            throw new IllegalArgumentException("pageSIze can't be less than 1!");
+        if (pageSize < 1) {
+            throw new IllegalArgumentException("pageSize can't be less than 1!");
         }
 
-        this.pageSize = pageSIze;
+        this.pageSize = pageSize;
     }
 
     public List<T> getPage(int page) {
         if (page < 1) {
-            throw new IllegalArgumentException("pageSIze can't be less than 1!");
+            throw new IllegalArgumentException("pageSize can't be less than 1!");
         }
 
         int fromIndex = this.pageSize * (page - 1);
