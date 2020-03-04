@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Paginator<T> {
-    protected int pageSIze;
+    protected int pageSize;
     protected List<T> elements;
 
     Paginator(List<T> elements, int pageSIze) {
@@ -14,7 +14,7 @@ public class Paginator<T> {
             throw new IllegalArgumentException("pageSIze can't be less than 1!");
         }
 
-        this.pageSIze = pageSIze;
+        this.pageSize = pageSIze;
     }
 
     public List<T> getPage(int page) {
@@ -22,8 +22,8 @@ public class Paginator<T> {
             throw new IllegalArgumentException("pageSIze can't be less than 1!");
         }
 
-        int fromIndex = this.pageSIze * (page - 1);
-        int toIndex = fromIndex + this.pageSIze;
+        int fromIndex = this.pageSize * (page - 1);
+        int toIndex = fromIndex + this.pageSize;
 
         return this.elements.subList(fromIndex, toIndex);
     }
