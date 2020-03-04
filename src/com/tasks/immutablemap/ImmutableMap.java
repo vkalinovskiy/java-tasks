@@ -160,22 +160,20 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     public static class Builder<K, V> {
         protected Map<K, V> innerMap;
 
-        public Builder<K, V> fromHashMap() {
-            this.innerMap = new HashMap<>();
-
-            return this;
+        protected Builder(Map<K, V> map) {
+            this.innerMap = map;
         }
 
-        public Builder<K, V> fromTreeMap() {
-            this.innerMap = new TreeMap<>();
-
-            return this;
+        public static <K, V> Builder fromHashMap() {
+            return new Builder<>(new HashMap<K, V> ());
         }
 
-        public Builder<K, V> fromLinkedHashMap() {
-            this.innerMap = new LinkedHashMap<>();
+        public static <K, V> Builder fromTreeMap() {
+            return new Builder<>(new TreeMap<K, V>());
+        }
 
-            return this;
+        public static <K, V> Builder fromLinkedHashMap() {
+            return new Builder<>(new LinkedHashMap<K, V>());
         }
 
         public Builder<K, V> put(K key, V value) {
