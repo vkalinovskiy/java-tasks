@@ -7,14 +7,14 @@ import java.util.function.Function;
 
 public class ImmutableMap<K, V> implements Map<K, V> {
 
-    protected Map<K, V> mapInner;
+    protected Map<K, V> innerMap;
 
     protected ImmutableMap(Map<K, V> map) {
-        this.mapInner = map;
+        this.innerMap = map;
     }
     
     public int size() {
-        return this.mapInner.size();
+        return this.innerMap.size();
     }
 
     public boolean isEmpty() {
@@ -22,35 +22,35 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     }
 
     public V get(Object key) {
-        return this.mapInner.get(key);
+        return this.innerMap.get(key);
     }
 
     public boolean containsKey(Object key) {
-        return this.mapInner.containsKey(key);
+        return this.innerMap.containsKey(key);
     }
 
     public boolean containsValue(Object value) {
-        return this.mapInner.containsValue(value);
+        return this.innerMap.containsValue(value);
     }
 
     public Set<K> keySet() {
-        return this.mapInner.keySet();
+        return this.innerMap.keySet();
     }
 
     public Set<Entry<K, V>> entrySet() {
-        return this.mapInner.entrySet();
+        return this.innerMap.entrySet();
     }
 
     public Collection<V> values() {
-        return this.mapInner.values();
+        return this.innerMap.values();
     }
 
     public V getOrDefault(Object key, V defaultValue) {
-        return this.mapInner.getOrDefault(key, defaultValue);
+        return this.innerMap.getOrDefault(key, defaultValue);
     }
 
     public void forEach(BiConsumer<? super K, ? super V> action) {
-        this.mapInner.forEach(action);
+        this.innerMap.forEach(action);
     }
 
     public V put(K key, V value) throws UnsupportedOperationException {
