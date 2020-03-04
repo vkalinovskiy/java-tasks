@@ -4,33 +4,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Paginator<T> {
-    protected int countOfPage;
+    protected int pageSIze;
     protected List<T> elements;
 
-    Paginator(List<T> elements, int countOfPage) {
+    Paginator(List<T> elements, int pageSIze) {
         this.elements = elements;
 
-        if (countOfPage < 1) {
-            throw new IllegalArgumentException("countOfPage can't be less than 1!");
+        if (pageSIze < 1) {
+            throw new IllegalArgumentException("pageSIze can't be less than 1!");
         }
 
-        this.countOfPage = countOfPage;
+        this.pageSIze = pageSIze;
     }
 
     public List<T> getPage(int page) {
-
         if (page < 1) {
-            throw new IllegalArgumentException("countOfPage can't be less than 1!");
+            throw new IllegalArgumentException("pageSIze can't be less than 1!");
         }
 
-        page--;
+        int fromIndex = this.pageSIze * (page - 1);
+        int toIndex = fromIndex + this.pageSIze;
 
-        int offset = this.countOfPage * page;
-
-        return this.elements
-                .stream()
-                .skip(offset)
-                .limit(this.countOfPage)
-                .collect(Collectors.toList());
+        return this.elements.subList(fromIndex, toIndex);
     }
 }
