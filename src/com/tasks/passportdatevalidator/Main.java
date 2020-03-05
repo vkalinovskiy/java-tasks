@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        LocalDate birthDate = LocalDate.of(1997, 2, 1);
-        LocalDate issuingPassportDate = LocalDate.of(2017, 8, 10);
+        LocalDate birthDate = LocalDate.of(1975, 3, 1);
+        LocalDate issuingPassportDate = LocalDate.of(2020, 3, 2);
 
         PassportDateValidator validator = new PassportDateValidator(birthDate, issuingPassportDate);
 
