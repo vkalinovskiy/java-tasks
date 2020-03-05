@@ -23,28 +23,41 @@ public class CircuitBreaker {
     }
 
     public void execute() throws RuntimeException {
-        if(this.isLocked()) {
-            this.writeLog();
+        this.checkLock();
+        this.checkErrorsLimitExceed();
+        this.resetErrorsLimitAndTimeBeforeUnlockIfAlreadyUnlocked();
+        this.executeInBlackBox();
+    }
 
-            throw new RuntimeException("BlackBox threw an exception!");
-        }
-
-        if(this.isErrorsLimitExceeded()) {
-            this.setLockTime();
-
-            throw new RuntimeException("BlackBox threw an exception!");
-        }
-
-        if(this.timeBeforeUnlock != null) {
-            this.resetErrorsCounter();
-            this.resetLockTime();
-        }
-
+    protected void executeInBlackBox() {
         try {
             blackBox.execute();
             this.resetErrorsCounter();
         } catch (RuntimeException e) {
             this.increaseErrorsCounter();
+        }
+    }
+
+    protected void resetErrorsLimitAndTimeBeforeUnlockIfAlreadyUnlocked() {
+        if(this.timeBeforeUnlock != null) {
+            this.resetErrorsCounter();
+            this.resetLockTime();
+        }
+    }
+
+    protected void checkLock() throws RuntimeException {
+        if(this.isLocked()) {
+            this.writeLog();
+
+            throw new RuntimeException("BlackBox threw an exception!");
+        }
+    }
+
+    protected void checkErrorsLimitExceed() {
+        if(this.isErrorsLimitExceeded()) {
+            this.setLockTime();
+
+            throw new RuntimeException("BlackBox threw an exception!");
         }
     }
 
