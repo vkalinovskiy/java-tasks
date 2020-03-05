@@ -40,6 +40,7 @@ public class CircuitBreaker {
 
         try {
             blackBox.execute();
+            this.resetErrorsCounter();
         } catch (RuntimeException e) {
             this.increaseErrorsCounter();
         }
