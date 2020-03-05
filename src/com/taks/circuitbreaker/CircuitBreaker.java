@@ -12,7 +12,7 @@ public class CircuitBreaker {
     protected int errorsLimit;
     protected int errorsCounter;
     protected int secondsWaiting;
-    protected LocalDateTime lockTime;
+    protected LocalDateTime timeBeforeUnlock;
     protected Path logFile;
 
     CircuitBreaker(int errorsLimit, int secondsWaiting) {
@@ -22,18 +22,20 @@ public class CircuitBreaker {
         this.logFile = Paths.get("log.txt");
     }
 
-    public void execute() {
+    public void execute() throws RuntimeException {
         if(this.isLocked()) {
             this.writeLog();
-            return;
+
+            throw new RuntimeException("BlackBox threw an exception!");
         }
 
         if(this.isErrorsLimitExceeded()) {
             this.setLockTime();
-            return;
+
+            throw new RuntimeException("BlackBox threw an exception!");
         }
 
-        if(this.lockTime != null) {
+        if(this.timeBeforeUnlock != null) {
             this.resetErrorsCounter();
             this.resetLockTime();
         }
@@ -59,15 +61,15 @@ public class CircuitBreaker {
     }
 
     protected void setLockTime() {
-        this.lockTime = LocalDateTime.now().plusSeconds(this.secondsWaiting);
+        this.timeBeforeUnlock = LocalDateTime.now().plusSeconds(this.secondsWaiting);
     }
 
     protected void resetLockTime() {
-        this.lockTime = null;
+        this.timeBeforeUnlock = null;
     }
 
     protected boolean isLocked() {
-        return LocalDateTime.now().isBefore(this.lockTime);
+        return LocalDateTime.now().isBefore(this.timeBeforeUnlock);
     }
 
     protected void writeLog() {
