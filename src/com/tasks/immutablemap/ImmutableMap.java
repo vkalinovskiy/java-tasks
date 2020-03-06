@@ -12,7 +12,7 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     protected ImmutableMap(Map<K, V> map) {
         this.innerMap = map;
     }
-    
+
     public int size() {
         return this.innerMap.size();
     }
@@ -164,16 +164,12 @@ public class ImmutableMap<K, V> implements Map<K, V> {
             this.innerMap = map;
         }
 
-        public static <K, V> Builder fromHashMap() {
-            return new Builder<>(new HashMap<K, V> ());
+        public static <K, V> Builder<K, V> fromHashMap() {
+            return new Builder<>(new HashMap<>());
         }
 
-        public static <K, V> Builder fromTreeMap() {
-            return new Builder<>(new TreeMap<K, V>());
-        }
-
-        public static <K, V> Builder fromLinkedHashMap() {
-            return new Builder<>(new LinkedHashMap<K, V>());
+        public static <K, V> Builder<K, V> fromLinkedHashMap() {
+            return new Builder<>(new LinkedHashMap<>());
         }
 
         public Builder<K, V> put(K key, V value) {
@@ -190,6 +186,32 @@ public class ImmutableMap<K, V> implements Map<K, V> {
 
         public ImmutableMap<K, V> build() {
             return new ImmutableMap<>(this.innerMap);
+        }
+    }
+
+    public static class TreeMapBuilder<K, V> extends Builder<K, V> {
+        protected TreeMap<K, V> innerMap;
+        protected Comparator<K> comparator;
+
+        protected TreeMapBuilder(Map<K, V> map) {
+            super(map);
+        }
+
+        public static <K, V> TreeMapBuilder<K, V> fromTreeMap() {
+            return new TreeMapBuilder<>(new TreeMap<>());
+        }
+
+        public TreeMapBuilder<K, V> withComparator(Comparator<K> comparator) {
+            this.comparator = comparator;
+
+            return this;
+        }
+
+        public ImmutableMap<K, V> build() {
+            var map = new TreeMap<K, V>(this.comparator);
+            map.putAll(this.innerMap);
+
+            return new ImmutableMap<>(map);
         }
     }
 }
