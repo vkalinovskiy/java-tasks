@@ -192,12 +192,12 @@ public class ImmutableMap<K, V> implements Map<K, V> {
     public static class TreeMapBuilder<K, V> extends Builder<K, V, TreeMapBuilder<K, V>> {
         protected Comparator<K> comparator;
 
-        protected TreeMapBuilder(TreeMap<K, V> map) {
+        protected TreeMapBuilder(HashMap<K, V> map) {
             super(map);
         }
 
         public static <K, V> TreeMapBuilder<K, V>fromTreeMap() {
-            return new TreeMapBuilder<>(new TreeMap<>());
+            return new TreeMapBuilder<>(new HashMap<>());
         }
 
         public TreeMapBuilder<K, V> withComparator(Comparator<K> comparator) {
