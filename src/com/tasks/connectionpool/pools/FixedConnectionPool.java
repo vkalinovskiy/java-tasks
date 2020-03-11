@@ -1,74 +1,47 @@
 package com.tasks.connectionpool.pools;
 
 import com.tasks.connectionpool.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.ArrayDeque;
 
 public class FixedConnectionPool implements ConnectionPool {
     protected ConnectionFactory factory;
-    protected ArrayList<ConnectionWithStatus> connections = new ArrayList<>();
+    ArrayDeque<Connection> connectionsQueue = new ArrayDeque<>();
 
-    public FixedConnectionPool(ConnectionFactory factory, Integer connectionsSize) throws SQLException, ClassNotFoundException {
+    public FixedConnectionPool(ConnectionFactory factory, Integer connectionsQueueLimit) throws SQLException, ClassNotFoundException {
         this.factory = factory;
-        createConnections(connectionsSize);
+        createConnections(connectionsQueueLimit);
     }
 
-    //TODO create a connection in getConnection method?
-    protected void createConnections(Integer connectionsSize) throws SQLException, ClassNotFoundException {
-        for (int i = 0; i < connectionsSize; i++) {
+    protected void createConnections(Integer limit) throws SQLException, ClassNotFoundException {
+        for (int i = 0; i < limit; i++) {
             Connection connection = factory.getConnection();
-            ConnectionWithStatus connectionWithStatus = new ConnectionWithStatus(connection, false);
-
-            connections.add(connectionWithStatus);
+            connectionsQueue.add(connection);
         }
     }
 
-    //TODO refactor
     public Connection getConnection() {
-        Optional<ConnectionWithStatus> unusedConnection = connections
-                .stream()
-                .filter(ConnectionWithStatus::isUnused)
-                .findFirst();
-
-        if(unusedConnection.isEmpty()) {
-            //TODO what an exception should use? or null?
-            throw new RuntimeException("No Connections Available");
+        Connection connection = connectionsQueue.pollFirst();
+        
+        if(connection == null) {
+            throw new RuntimeException("No available connections!");
         }
 
-        ConnectionWithStatus connectionWithStatus = unusedConnection.get();
-
-        connectionWithStatus.setUsed(true);
-
-        return connectionWithStatus.getConnection();
+        return connection;
     }
 
-//    boolean releaseConnection(Connection connection);
-//    String getUrl();
+    public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
+        if(connection.isClosed()) {
+            connection = factory.getConnection();
+        }
+
+        connectionsQueue.add(connection);
+    }
+
+    public String getUrl() {
+        return factory.getUrl();
+    }
+
 //    <T> T execute(Function<Connection, T> f);
-
-    protected static class ConnectionWithStatus {
-        Connection connection;
-        Boolean isUsed;
-
-        ConnectionWithStatus(Connection connection, Boolean isUsed) {
-            this.connection = connection;
-            this.isUsed = isUsed;
-        }
-
-        public void setUsed(Boolean used) {
-            isUsed = used;
-        }
-
-        public Boolean isUnused() {
-            return !isUsed;
-        }
-
-        public Connection getConnection() {
-            return connection;
-        }
-    }
 }

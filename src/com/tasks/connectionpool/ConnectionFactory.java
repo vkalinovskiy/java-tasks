@@ -14,6 +14,10 @@ public class ConnectionFactory {
         return DriverManager.getConnection(databaseUrl, username, password);
     }
 
+    public String getUrl() {
+        return this.databaseUrl;
+    }
+
     public static class Builder {
         private ConnectionFactory factory;
 
