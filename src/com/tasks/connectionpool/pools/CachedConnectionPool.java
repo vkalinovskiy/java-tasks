@@ -24,7 +24,6 @@ public class CachedConnectionPool implements ConnectionPool {
         return factory.getConnection();
     }
 
-
 //
 //    protected void createConnection() throws SQLException, ClassNotFoundException {
 //        if(availableConnections.size() >= MAX_SIZE_CONNECTIONS) {

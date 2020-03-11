@@ -7,10 +7,12 @@ import java.util.ArrayDeque;
 
 public class FixedConnectionPool implements ConnectionPool {
     protected ConnectionFactory factory;
-    ArrayDeque<Connection> connectionsQueue = new ArrayDeque<>();
+    protected ArrayDeque<Connection> connectionsQueue = new ArrayDeque<>();
+    protected Integer LIMIT_SIZE;
 
     public FixedConnectionPool(ConnectionFactory factory, Integer connectionsQueueLimit) throws SQLException, ClassNotFoundException {
         this.factory = factory;
+        LIMIT_SIZE = connectionsQueueLimit;
         createConnections(connectionsQueueLimit);
     }
 
@@ -32,11 +34,13 @@ public class FixedConnectionPool implements ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
-        if(connection.isClosed()) {
-            connection = factory.getConnection();
-        }
+        if(connectionsQueue.size() < LIMIT_SIZE) {
+            if(connection.isClosed()) {
+                connection = factory.getConnection();
+            }
 
-        connectionsQueue.add(connection);
+            connectionsQueue.add(connection);
+        }
     }
 
     public String getUrl() {
