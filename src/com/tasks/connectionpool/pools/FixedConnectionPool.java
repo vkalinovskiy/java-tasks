@@ -10,10 +10,10 @@ public class FixedConnectionPool implements ConnectionPool {
     protected ArrayDeque<Connection> connectionsQueue = new ArrayDeque<>();
     protected Integer LIMIT_SIZE;
 
-    public FixedConnectionPool(ConnectionFactory factory, Integer connectionsQueueLimit) throws SQLException, ClassNotFoundException {
+    public FixedConnectionPool(ConnectionFactory factory, Integer limitConnections) throws SQLException, ClassNotFoundException {
         this.factory = factory;
-        LIMIT_SIZE = connectionsQueueLimit;
-        createConnections(connectionsQueueLimit);
+        LIMIT_SIZE = limitConnections;
+        createConnections(limitConnections);
     }
 
     protected void createConnections(Integer limit) throws SQLException, ClassNotFoundException {
