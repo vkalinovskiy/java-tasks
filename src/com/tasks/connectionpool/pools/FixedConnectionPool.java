@@ -4,20 +4,22 @@ import com.tasks.connectionpool.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class FixedConnectionPool implements ConnectionPool {
     protected ConnectionFactory factory;
     protected ArrayDeque<Connection> connectionsQueue = new ArrayDeque<>();
-    protected Integer LIMIT_SIZE;
+//    protected ConcurrentLinkedQueue<Connection> connectionsQueue;
+    protected Integer limitSize;
 
     public FixedConnectionPool(ConnectionFactory factory, Integer limitConnections) throws SQLException, ClassNotFoundException {
         this.factory = factory;
-        LIMIT_SIZE = limitConnections;
+        limitSize = limitConnections;
         createConnections(limitConnections);
     }
 
     protected void createConnections(Integer limit) throws SQLException, ClassNotFoundException {
-        for (int i = 0; i < limit; i++) {
+        while (connectionsQueue.size() < limit) {
             Connection connection = factory.getConnection();
             connectionsQueue.add(connection);
         }
@@ -34,13 +36,15 @@ public class FixedConnectionPool implements ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
-        if(connectionsQueue.size() < LIMIT_SIZE) {
-            if(connection.isClosed()) {
-                connection = factory.getConnection();
-            }
-
-            connectionsQueue.add(connection);
+        if(connection == null || connectionsQueue.size() >= limitSize) {
+            return;
         }
+
+        if(connection.isClosed()) {
+            connection = factory.getConnection();
+        }
+
+        connectionsQueue.add(connection);
     }
 
     public String getUrl() {

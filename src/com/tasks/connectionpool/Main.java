@@ -17,6 +17,8 @@ public class Main {
             FixedConnectionPool connectionPool = new FixedConnectionPool(factory, 5);
             Connection connection = connectionPool.getConnection();
 
+            connectionPool.releaseConnection(connection);
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM posts");
 

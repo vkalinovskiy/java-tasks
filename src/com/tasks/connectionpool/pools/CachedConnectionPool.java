@@ -14,32 +14,32 @@ import java.util.stream.Collectors;
 public class CachedConnectionPool implements ConnectionPool {
     protected ConnectionFactory factory;
     protected List<InstantConnection> instantConnectionsList = new ArrayList<>();
-    protected final Integer INITIAL_SIZE_CONNECTIONS;
-    protected final Integer MAX_SIZE_CONNECTIONS;
-    protected final Integer UNUSED_CONNECTION_LIFETIME;
+    protected Integer initialConnectionsSize;
+    protected Integer maxConnectionsSize;
+    protected Integer unusedConnectionLifetime;
 
     CachedConnectionPool(ConnectionFactory factory, Integer initialSize, Integer maxSize, Integer lifeTime) throws SQLException, ClassNotFoundException {
         this.factory = factory;
-        this.INITIAL_SIZE_CONNECTIONS = initialSize;
-        this.MAX_SIZE_CONNECTIONS = maxSize;
-        this.UNUSED_CONNECTION_LIFETIME = lifeTime;
+        this.initialConnectionsSize = initialSize;
+        this.maxConnectionsSize = maxSize;
+        this.unusedConnectionLifetime = lifeTime;
 
         createInitialConnections();
     }
 
     protected void createInitialConnections() throws SQLException, ClassNotFoundException {
-        while (instantConnectionsList.size() < INITIAL_SIZE_CONNECTIONS) {
+        while (instantConnectionsList.size() < initialConnectionsSize) {
             createConnection();
         }
     }
 
     protected void createConnection() throws SQLException, ClassNotFoundException {
-        if(instantConnectionsList.size() >= MAX_SIZE_CONNECTIONS) {
+        if(instantConnectionsList.size() >= maxConnectionsSize) {
             throw new RuntimeException("Max size of instantConnectionsList exceeded!");
         }
 
         Connection connection = factory.getConnection();
-        InstantConnection instantConnection = new InstantConnection(connection, false, UNUSED_CONNECTION_LIFETIME);
+        InstantConnection instantConnection = new InstantConnection(connection, false, unusedConnectionLifetime);
 
         instantConnectionsList.add(instantConnection);
     }
@@ -80,14 +80,11 @@ public class CachedConnectionPool implements ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
-        if(instantConnectionsList.size() < MAX_SIZE_CONNECTIONS) {
-            if(connection.isClosed()) {
-                connection = factory.getConnection();
+        if(instantConnectionsList.size() < maxConnectionsSize) {
+            if(!connection.isClosed()) {
+                InstantConnection instantConnection = new InstantConnection(connection, false, unusedConnectionLifetime);
+                instantConnectionsList.add(instantConnection);
             }
-
-            InstantConnection instantConnection = new InstantConnection(connection, false, UNUSED_CONNECTION_LIFETIME);
-
-            instantConnectionsList.add(instantConnection);
         }
     }
 
