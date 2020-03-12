@@ -3,13 +3,11 @@ package com.tasks.connectionpool.pools;
 import com.tasks.connectionpool.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class FixedConnectionPool implements ConnectionPool {
     protected ConnectionFactory factory;
-    protected ArrayDeque<Connection> connectionsQueue = new ArrayDeque<>();
-//    protected ConcurrentLinkedQueue<Connection> connectionsQueue;
+    protected ConcurrentLinkedQueue<Connection> connectionsQueue = new ConcurrentLinkedQueue<>();
     protected Integer limitSize;
 
     public FixedConnectionPool(ConnectionFactory factory, Integer limitConnections) throws SQLException, ClassNotFoundException {
@@ -26,7 +24,7 @@ public class FixedConnectionPool implements ConnectionPool {
     }
 
     public Connection getConnection() {
-        Connection connection = connectionsQueue.pollFirst();
+        Connection connection = connectionsQueue.poll();
         
         if(connection == null) {
             throw new RuntimeException("No available connections!");
@@ -36,7 +34,12 @@ public class FixedConnectionPool implements ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
-        if(connection == null || connectionsQueue.size() >= limitSize) {
+        if(connection == null) {
+            throw new UnsupportedOperationException("Connection cannot be null");
+        }
+
+        if(connectionsQueue.size() >= limitSize) {
+            connection.close();
             return;
         }
 
@@ -50,6 +53,4 @@ public class FixedConnectionPool implements ConnectionPool {
     public String getUrl() {
         return factory.getUrl();
     }
-
-//    <T> T execute(Function<Connection, T> f);
 }

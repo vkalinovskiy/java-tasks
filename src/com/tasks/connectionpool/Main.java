@@ -1,7 +1,6 @@
 package com.tasks.connectionpool;
 
 import com.tasks.connectionpool.pools.FixedConnectionPool;
-
 import java.sql.*;
 
 public class Main {
@@ -15,22 +14,23 @@ public class Main {
                     .build();
 
             FixedConnectionPool connectionPool = new FixedConnectionPool(factory, 5);
-            Connection connection = connectionPool.getConnection();
+            int result = connectionPool.execute(v -> {
+                  int countRows = 0;
 
-            connectionPool.releaseConnection(connection);
+                  try {
+                        Statement statement = v.createStatement();
+                        ResultSet rs = statement.executeQuery("SELECT COUNT(*) as countRows FROM posts");
+                        rs.next();
+                        countRows = rs.getInt("countRows");
+                        statement.close();
+                        rs.close();
+                  } catch (SQLException e) {
+                        e.printStackTrace();
+                  }
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM posts");
+                  return countRows;
+            });
 
-            while (resultSet.next()) {
-                  String title = resultSet.getString("title");
-
-                  System.out.println("\n================\n");
-                  System.out.println("Title: " + title);
-            }
-
-            resultSet.close();
-            statement.close();
-            connection.close();
+            System.out.println("Rows in posts table = " + result);
       }
 }
