@@ -196,7 +196,7 @@ public class ImmutableMap<K, V> implements Map<K, V> {
             super(map);
         }
 
-        public static <K, V> TreeMapBuilder<K, V>fromTreeMap() {
+        public static <K, V> TreeMapBuilder<K, V> fromTreeMap() {
             return new TreeMapBuilder<>(new HashMap<>());
         }
 

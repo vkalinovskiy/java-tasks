@@ -1,4 +1,5 @@
 package com.tasks.circuitbreaker;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -39,14 +40,14 @@ public class CircuitBreaker {
     }
 
     protected void resetErrorsLimitAndTimeBeforeUnlockIfAlreadyUnlocked() {
-        if(this.timeBeforeUnlock != null) {
+        if (this.timeBeforeUnlock != null) {
             this.resetErrorsCounter();
             this.resetLockTime();
         }
     }
 
     protected void checkLock() throws RuntimeException {
-        if(this.isLocked()) {
+        if (this.isLocked()) {
             this.writeLog();
 
             throw new RuntimeException("BlackBox threw an exception!");
@@ -54,7 +55,7 @@ public class CircuitBreaker {
     }
 
     protected void checkErrorsLimitExceed() {
-        if(this.isErrorsLimitExceeded()) {
+        if (this.isErrorsLimitExceeded()) {
             this.setLockTime();
 
             throw new RuntimeException("BlackBox threw an exception!");
