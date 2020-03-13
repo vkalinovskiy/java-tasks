@@ -4,8 +4,6 @@ import com.tasks.connectionpool.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,7 +25,7 @@ public class CachedConnectionPool implements ConnectionPool {
         }
     }
 
-    protected Connection createConnection() throws SQLException, ClassNotFoundException {
+    protected void createConnection() throws SQLException, ClassNotFoundException {
         Connection connection = factory.getConnection();
         connectionsQueue.add(connection);
         currentConnectionsSize.incrementAndGet();
@@ -36,7 +34,7 @@ public class CachedConnectionPool implements ConnectionPool {
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         Connection connection = getConnectionRecursive();
 
-        if(connection == null) {
+        if(connection == null && currentConnectionsSize.get() < maxConnectionsSize) {
             throw new RuntimeException("No available connections!");
         }
 
@@ -52,16 +50,16 @@ public class CachedConnectionPool implements ConnectionPool {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-//    protected Connection getConnectionRecursive() throws SQLException, ClassNotFoundException {
-//        Connection connection = connectionsQueue.poll();
-//
-//        if(connection == null && currentConnectionsSize.get() < maxConnectionsSize) {
-//            createConnection();
-//            connection = getConnectionRecursive();
-//        }
-//
-//        return connection;
-//    }
+    protected Connection getConnectionRecursive() throws SQLException, ClassNotFoundException {
+        Connection connection = connectionsQueue.poll();
+
+        if(connection == null && currentConnectionsSize.get() < maxConnectionsSize) {
+            createConnection();
+            connection = getConnectionRecursive();
+        }
+
+        return connection;
+    }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
         if(connection == null) {
