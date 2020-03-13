@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CachedConnectionPool implements ConnectionPool {
     protected ConnectionFactory factory;
     protected ConcurrentLinkedQueue<Connection> connectionsQueue = new ConcurrentLinkedQueue<>();
-
     protected Integer initialConnectionsSize;
     protected Integer maxConnectionsSize;
     protected AtomicInteger currentConnectionsSize = new AtomicInteger(0);
@@ -32,30 +31,15 @@ public class CachedConnectionPool implements ConnectionPool {
     }
 
     public Connection getConnection() throws SQLException, ClassNotFoundException {
-        Connection connection = getConnectionRecursive();
-
-        if(connection == null && currentConnectionsSize.get() < maxConnectionsSize) {
-            throw new RuntimeException("No available connections!");
-        }
-
-        return connection;
-    }
-
-    /**
-     * Gets the connection from queue.
-     * Creating it if it does not exist.
-     * Return null if limit of connections exceeded.
-     *
-     * @return Connection, null if limit exceeded
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
-    protected Connection getConnectionRecursive() throws SQLException, ClassNotFoundException {
         Connection connection = connectionsQueue.poll();
 
-        if(connection == null && currentConnectionsSize.get() < maxConnectionsSize) {
-            createConnection();
-            connection = getConnectionRecursive();
+        if(connection == null) {
+            if(currentConnectionsSize.get() < maxConnectionsSize) {
+                createConnection();
+                connection = connectionsQueue.poll();
+            } else {
+                throw new RuntimeException("No available connections!");
+            }
         }
 
         return connection;
@@ -66,8 +50,7 @@ public class CachedConnectionPool implements ConnectionPool {
             throw new UnsupportedOperationException("Connection cannot be null");
         }
 
-        //TODO reduce to initial
-        if(currentConnectionsSize.get() >= initialConnectionsSize) {
+        if(connectionsQueue.size() >= initialConnectionsSize) {
             connection.close();
             currentConnectionsSize.decrementAndGet();
             return;

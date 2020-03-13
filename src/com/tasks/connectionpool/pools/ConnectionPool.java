@@ -9,21 +9,14 @@ public interface ConnectionPool {
     void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException;
     String getUrl();
     default  <T> T execute(Function<Connection, T> f) throws SQLException, ClassNotFoundException {
-        Connection connection = getConnection();
-
-        if(f == null) {
-            f = v -> {
-                try {
-                    v.close();
-                    releaseConnection(v);
-                } catch (SQLException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            };
+        if (f == null) {
+            return null;
         }
 
-        return f.apply(connection);
+        Connection connection = getConnection();
+        var result = f.apply(connection);
+        releaseConnection(connection);
+
+        return result;
     }
 }

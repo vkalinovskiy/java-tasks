@@ -24,7 +24,8 @@ public class Main {
                         countRows = rs.getInt("countRows");
                         statement.close();
                         rs.close();
-                  } catch (SQLException e) {
+                        connectionPool.releaseConnection(v);
+                  } catch (SQLException | ClassNotFoundException e) {
                         e.printStackTrace();
                   }
 
