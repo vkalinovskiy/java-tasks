@@ -88,7 +88,8 @@ public class CircuitBreaker {
 
     protected void writeLog() {
         try {
-            Files.writeString(this.logFile, "BlackBox is temporarily unavailable!", StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            Files.writeString(this.logFile, "BlackBox is temporarily unavailable!",
+                    StandardCharsets.UTF_8, StandardOpenOption.APPEND);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

@@ -4,7 +4,8 @@ import java.util.Iterator;
 
 public class FibonacciIterator implements Iterator<Integer> {
 
-    private int current = 1, prev = 0;
+    private int current = 1;
+    private int prev = 0;
 
     @Override
     public boolean hasNext() {
