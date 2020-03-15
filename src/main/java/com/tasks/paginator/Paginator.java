@@ -1,7 +1,6 @@
 package com.tasks.paginator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Paginator<T> {
     protected int pageSize;

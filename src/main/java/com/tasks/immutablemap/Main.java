@@ -9,7 +9,7 @@ public class Main {
                 .put("first", 1)
                 .putAll(Map.of("second", 2, "third", 3))
                 .withComparator(Comparator.nullsFirst(String::compareTo))
-                .put("aaa", 111)
+                .put("aaa", 10)
                 .build();
 
         System.out.println("Size of collection: " + map.size());
