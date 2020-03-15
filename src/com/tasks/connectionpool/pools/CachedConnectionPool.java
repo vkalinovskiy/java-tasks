@@ -1,7 +1,5 @@
 package com.tasks.connectionpool.pools;
-
 import com.tasks.connectionpool.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -14,20 +12,22 @@ public class CachedConnectionPool implements ConnectionPool {
     protected Integer maxConnectionsSize;
     protected AtomicInteger currentConnectionsSize = new AtomicInteger(0);
 
-    CachedConnectionPool(ConnectionFactory factory, Integer initialSize, Integer maxSize) throws SQLException, ClassNotFoundException {
+    public CachedConnectionPool(ConnectionFactory factory, Integer initialSize, Integer maxSize) throws SQLException, ClassNotFoundException {
         this.factory = factory;
         this.initialConnectionsSize = initialSize;
         this.maxConnectionsSize = maxSize;
 
         while (currentConnectionsSize.get() < initialSize) {
-            createConnection();
+            Connection connection = createConnection();
+            connectionsQueue.add(connection);
         }
     }
 
-    protected void createConnection() throws SQLException, ClassNotFoundException {
+    protected Connection createConnection() throws SQLException, ClassNotFoundException {
         Connection connection = factory.getConnection();
-        connectionsQueue.add(connection);
         currentConnectionsSize.incrementAndGet();
+
+        return connection;
     }
 
     public Connection getConnection() throws SQLException, ClassNotFoundException {
@@ -35,8 +35,7 @@ public class CachedConnectionPool implements ConnectionPool {
 
         if(connection == null) {
             if(currentConnectionsSize.get() < maxConnectionsSize) {
-                createConnection();
-                connection = connectionsQueue.poll();
+                connection = createConnection();
             } else {
                 throw new RuntimeException("No available connections!");
             }

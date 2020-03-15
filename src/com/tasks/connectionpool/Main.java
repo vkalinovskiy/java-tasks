@@ -1,6 +1,6 @@
 package com.tasks.connectionpool;
 
-import com.tasks.connectionpool.pools.FixedConnectionPool;
+import com.tasks.connectionpool.pools.CachedConnectionPool;
 import java.sql.*;
 
 public class Main {
@@ -13,7 +13,7 @@ public class Main {
                     .setDriverClassName("com.mysql.cj.jdbc.Driver")
                     .build();
 
-            FixedConnectionPool connectionPool = new FixedConnectionPool(factory, 5);
+            CachedConnectionPool connectionPool = new CachedConnectionPool(factory, 5, 10);
             int result = connectionPool.execute(v -> {
                   int countRows = 0;
 
