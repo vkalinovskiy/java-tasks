@@ -1,9 +1,7 @@
 package com.tasks.usertrack.db;
 
 import com.tasks.usertrack.db.dao.TrackMapper;
-import com.tasks.usertrack.db.dao.UserMapper;
 import com.tasks.usertrack.db.models.Track;
-import com.tasks.usertrack.db.models.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -11,7 +9,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
