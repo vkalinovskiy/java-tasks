@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PassportDateValidatorTest {
     @Test
-    void isValid_IssuingDateGreaterThanBirthDate_True() {
+    void isValidIssuingDateGreaterThanBirthDateTrue() {
         LocalDate birthDate = LocalDate.of(2000, 2, 1);
         LocalDate issuingPassportDate = LocalDate.of(2021, 3, 1);
 
@@ -16,7 +16,7 @@ class PassportDateValidatorTest {
     }
 
     @Test
-    void isValid_IssuingDateLessThanBirthDate_False() {
+    void isValidIssuingDateLessThanBirthDateFalse() {
         LocalDate birthDate = LocalDate.of(2000, 2, 1);
         LocalDate issuingPassportDate = LocalDate.of(2015, 3, 2);
 

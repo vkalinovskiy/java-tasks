@@ -25,9 +25,9 @@ public class PassportDateValidator {
     protected int getAgeForNewPassport(int age) {
         int nextAge;
 
-        if(age <= 14) {
+        if (age <= 14) {
             nextAge = 14;
-        } else if(age <= 21) {
+        } else if (age <= 21) {
             nextAge = 21;
         } else {
             nextAge = 45;

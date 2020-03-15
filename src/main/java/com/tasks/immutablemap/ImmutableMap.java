@@ -77,7 +77,8 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         );
     }
 
-    public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) throws UnsupportedOperationException {
+    public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction)
+            throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 String.format("%s is immutable, so the collection cannot be cleared.",
                         this.getClass().getName()
@@ -85,7 +86,8 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         );
     }
 
-    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) throws UnsupportedOperationException {
+    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction)
+            throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 String.format("%s is immutable, so the collection cannot be cleared.",
                         this.getClass().getName()
@@ -93,7 +95,8 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         );
     }
 
-    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) throws UnsupportedOperationException {
+    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)
+            throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 String.format("%s is immutable, so the collection cannot be cleared.",
                         this.getClass().getName()
@@ -101,7 +104,8 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         );
     }
 
-    public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) throws UnsupportedOperationException {
+    public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction)
+            throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 String.format("%s is immutable, so the collection cannot be cleared.",
                         this.getClass().getName()
@@ -149,7 +153,8 @@ public class ImmutableMap<K, V> implements Map<K, V> {
         );
     }
 
-    public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) throws UnsupportedOperationException {
+    public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function)
+            throws UnsupportedOperationException {
         throw new UnsupportedOperationException(
                 String.format("%s is immutable, so the collection cannot be changed.",
                         this.getClass().getName()
