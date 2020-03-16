@@ -15,9 +15,7 @@ import java.util.List;
 
 public class UserTrack {
     public static void main(String[] args) {
-        try(
-                Reader reader = Resources.getResourceAsReader("user_track/mybatis-config.xml");
-        ) {
+        try (Reader reader = Resources.getResourceAsReader("user_track/mybatis-config.xml")) {
             SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
             SqlSession session = sqlSessionFactory.openSession();
 
