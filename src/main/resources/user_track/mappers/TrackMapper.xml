@@ -10,9 +10,18 @@
   <select id="getByUserId" resultMap="track" parameterType="java.lang.Integer">
     SELECT * FROM user_track.track WHERE user_id = #{id}
   </select>
-  <select id="selectByUserAndTimePeriod" resultType="com.tasks.usertrack.db.models.Track" resultMap="com.tasks.usertrack.db.dao.TrackMapper.track">
-    SELECT * FROM user_track.track WHERE user_id = #{userId}
-                                     AND created_at BETWEEN #{dateFrom,jdbcType=TIMESTAMP} AND #{dateTo,jdbcType=TIMESTAMP};
+  <select id="selectByUserAndTimePeriod" resultType="com.tasks.usertrack.db.models.Track"
+          resultMap="com.tasks.usertrack.db.dao.TrackMapper.track">
+        SELECT * FROM user_track.track WHERE user_id = #{userId}
+        <if test="dateFrom != null and dateTo != null">
+            AND created_at BETWEEN #{dateFrom,jdbcType=TIMESTAMP} AND #{dateTo,jdbcType=TIMESTAMP};
+        </if>
+        <if test="dateTo != null and dateFrom == null">
+          AND #{dateTo,jdbcType=TIMESTAMP} >= created_at
+        </if>
+        <if test="dateTo == null and dateFrom != null">
+          AND created_at >= #{dateFrom,jdbcType=TIMESTAMP}
+        </if>
   </select>
   <insert id="insert" parameterType="com.tasks.usertrack.db.models.Track">
     INSERT INTO user_track.track

@@ -24,7 +24,9 @@ public class UserTrack {
             Date dateFrom = new Date(120, Calendar.MARCH, 13);
             Date dateTo = new Date(120, Calendar.MARCH, 16);
 
-            List<Track> tracks = trackMapper.selectByUserAndTimePeriod(1, dateFrom, dateTo);
+//            List<Track> tracks = trackMapper.selectByUserAndTimePeriod(1, dateFrom, dateTo);
+//            List<Track> tracks = trackMapper.selectByUserAndTimePeriod(1, null, dateTo);
+            List<Track> tracks = trackMapper.selectByUserAndTimePeriod(1, dateFrom, null);
 
             System.out.println(tracks.size());
 
