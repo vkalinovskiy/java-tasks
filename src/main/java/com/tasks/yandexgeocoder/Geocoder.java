@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasks.yandexgeocoder.responsestructure.GeocoderResponse;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class Geocoder {
@@ -15,7 +14,7 @@ public class Geocoder {
         cache = new CacheLocation();
     }
 
-    public Location getAddress(Coordinates coordinates) throws IOException {
+    public Location getAddress(Coordinates coordinates) {
         Location location;
 
         location = getFromCache(coordinates);
@@ -27,19 +26,24 @@ public class Geocoder {
         return location;
     }
 
-    protected Location getFromApi(Coordinates coordinates) throws IOException {
-        URL url = new URL("https://geocode-maps.yandex.ru/1.x/?apikey="
-                + apiKey + "&geocode=" + coordinates + "&results=1&format=json");
+    protected Location getFromApi(Coordinates coordinates) {
+        try {
+            URL url = new URL("https://geocode-maps.yandex.ru/1.x/?apikey="
+                    + apiKey + "&geocode=" + coordinates + "&results=1&format=json");
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        GeocoderResponse response = objectMapper.readValue(url, GeocoderResponse.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            GeocoderResponse response = objectMapper.readValue(url, GeocoderResponse.class);
 
-        Location location = new ResponseConverter(response).convert();
-        
-        cache.put(coordinates, location);
+            Location location = new ResponseConverter(response).convert();
 
-        return location;
+            cache.put(coordinates, location);
+
+            return location;
+        } catch (Exception exception) {
+            throw new RuntimeException("Error in request to Yandex API");
+        }
+
     }
 
     protected Location getFromCache(Coordinates coordinates) {

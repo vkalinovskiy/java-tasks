@@ -23,7 +23,5 @@ class GeocoderTest {
         assertEquals("Омск", address.getCity());
         assertEquals("Ильинская улица", address.getStreet());
         assertEquals("4", address.getHouse());
-
-        ya.getAddress(coordinates);
     }
 }
