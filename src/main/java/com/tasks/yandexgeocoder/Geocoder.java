@@ -14,7 +14,7 @@ public class Geocoder {
         cache = new CacheLocation();
     }
 
-    public Location getAddress(Coordinates coordinates) {
+    public Location getLocation(Coordinates coordinates) {
         Location location;
 
         location = getFromCache(coordinates);

@@ -14,14 +14,14 @@ class GeocoderTest {
 
         Coordinates coordinates = new Coordinates(73.374437, 54.979878);
 
-        Location address = ya.getAddress(coordinates);
+        Location location = ya.getLocation(coordinates);
 
-        assertEquals("RU", address.getCountryCode());
-        assertEquals(644024, address.getPostalCode());
-        assertEquals("Россия", address.getCountry());
-        assertEquals("Омская область", address.getProvince());
-        assertEquals("Омск", address.getCity());
-        assertEquals("Ильинская улица", address.getStreet());
-        assertEquals("4", address.getHouse());
+        assertEquals("RU", location.getCountryCode());
+        assertEquals(644024, location.getPostalCode());
+        assertEquals("Россия", location.getCountry());
+        assertEquals("Омская область", location.getProvince());
+        assertEquals("Омск", location.getCity());
+        assertEquals("Ильинская улица", location.getStreet());
+        assertEquals("4", location.getHouse());
     }
 }
