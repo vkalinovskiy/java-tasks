@@ -5,7 +5,7 @@ import com.tasks.yandexgeocoder.responsestructure.GeocoderResponse;
 
 public class ResponseConverter {
     protected GeocoderResponse geocoderResponse;
-    protected Location location;
+    protected Location location = new Location();
     protected String countryCode;
     protected Integer postalCode;
     protected String country;
@@ -24,7 +24,7 @@ public class ResponseConverter {
 
     public Location convert() {
         extractDataFromResponse();
-        setDataToAddressFormatted();
+        setDataToLocation();
 
         return location;
     }
@@ -41,9 +41,7 @@ public class ResponseConverter {
         house = address.getHouse();
     }
 
-    protected void setDataToAddressFormatted() {
-        location = new Location();
-
+    protected void setDataToLocation() {
         location.setCountryCode(countryCode);
         location.setPostalCode(postalCode);
         location.setCountry(country);
