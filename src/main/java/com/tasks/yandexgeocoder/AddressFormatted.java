@@ -1,12 +1,12 @@
 package com.tasks.yandexgeocoder;
 
-public class Address {
+public class AddressFormatted {
     protected String countryCode;
     protected String country;
     protected String province;
-    protected String area;
-    protected String locality;
-    protected String formatted;
+    protected String city;
+    protected String street;
+    protected String house;
     protected Integer postalCode;
 
     public String getCountryCode() {
@@ -33,28 +33,28 @@ public class Address {
         this.province = province;
     }
 
-    public String getArea() {
-        return area;
+    public String getCity() {
+        return city;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getLocality() {
-        return locality;
+    public String getStreet() {
+        return street;
     }
 
-    public void setLocality(String locality) {
-        this.locality = locality;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public String getFormatted() {
-        return formatted;
+    public String getHouse() {
+        return house;
     }
 
-    public void setFormatted(String formatted) {
-        this.formatted = formatted;
+    public void setHouse(String house) {
+        this.house = house;
     }
 
     public Integer getPostalCode() {

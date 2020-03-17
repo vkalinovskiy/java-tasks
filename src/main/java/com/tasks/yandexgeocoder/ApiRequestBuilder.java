@@ -7,25 +7,25 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestHandler {
+public class ApiRequestBuilder<T> {
     protected String baseUrl;
-    protected Map<String, String> getParams = new HashMap<>();
+    protected Map<String, T> getParams = new HashMap<>();
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
-    public void addGetParam(String name, String value) {
+    public void addGetParam(String name, T value) {
         getParams.put(name, value);
     }
 
     protected URL getRequestUrl() throws UnsupportedEncodingException, MalformedURLException {
         StringBuilder result = new StringBuilder();
 
-        for (Map.Entry<String, String> entry : getParams.entrySet()) {
+        for (Map.Entry<String, T> entry : getParams.entrySet()) {
             result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
             result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            result.append(URLEncoder.encode((String) entry.getValue(), "UTF-8"));
             result.append("&");
         }
 
