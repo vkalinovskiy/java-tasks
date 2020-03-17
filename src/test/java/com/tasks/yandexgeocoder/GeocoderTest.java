@@ -1,13 +1,11 @@
 package com.tasks.yandexgeocoder;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeocoderTest {
 
     @org.junit.jupiter.api.Test
-    void addressesShouldEquals() throws IOException {
+    void addressesShouldEquals() {
         Geocoder ya = new Geocoder.Builder()
                 .setApiKey("020ce9a8-6dbe-49fd-8705-1178fa1e2b47")
                 .build();
