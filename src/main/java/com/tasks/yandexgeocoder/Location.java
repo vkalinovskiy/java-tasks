@@ -1,6 +1,6 @@
 package com.tasks.yandexgeocoder;
 
-public class AddressFormatted {
+public class Location {
     protected String countryCode;
     protected String country;
     protected String province;

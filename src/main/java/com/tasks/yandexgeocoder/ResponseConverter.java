@@ -3,9 +3,9 @@ package com.tasks.yandexgeocoder;
 import com.tasks.yandexgeocoder.responsestructure.Address;
 import com.tasks.yandexgeocoder.responsestructure.GeocoderResponse;
 
-public class GeocoderResponseConverter {
+public class ResponseConverter {
     protected GeocoderResponse geocoderResponse;
-    protected AddressFormatted addressFormatted;
+    protected Location location;
     protected String countryCode;
     protected Integer postalCode;
     protected String country;
@@ -14,19 +14,19 @@ public class GeocoderResponseConverter {
     protected String street;
     protected String house;
 
-    public GeocoderResponseConverter(GeocoderResponse geocoderResponse) {
+    public ResponseConverter(GeocoderResponse geocoderResponse) {
         this.geocoderResponse = geocoderResponse;
     }
 
-    public void setGeocoderResponse(GeocoderResponse geocoderResponse) {
+    public void setResponse(GeocoderResponse geocoderResponse) {
         this.geocoderResponse = geocoderResponse;
     }
 
-    public AddressFormatted convert() {
+    public Location convert() {
         extractDataFromResponse();
         setDataToAddressFormatted();
 
-        return addressFormatted;
+        return location;
     }
 
     protected void extractDataFromResponse() {
@@ -42,14 +42,14 @@ public class GeocoderResponseConverter {
     }
 
     protected void setDataToAddressFormatted() {
-        addressFormatted = new AddressFormatted();
+        location = new Location();
 
-        addressFormatted.setCountryCode(countryCode);
-        addressFormatted.setPostalCode(postalCode);
-        addressFormatted.setCountry(country);
-        addressFormatted.setProvince(province);
-        addressFormatted.setCity(city);
-        addressFormatted.setStreet(street);
-        addressFormatted.setHouse(house);
+        location.setCountryCode(countryCode);
+        location.setPostalCode(postalCode);
+        location.setCountry(country);
+        location.setProvince(province);
+        location.setCity(city);
+        location.setStreet(street);
+        location.setHouse(house);
     }
 }
