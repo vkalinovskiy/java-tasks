@@ -35,7 +35,7 @@ public class Geocoder {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             GeocoderResponse response = objectMapper.readValue(url, GeocoderResponse.class);
 
-            Location location = new ResponseConverter(response).convert();
+            Location location = new ResponseConverter().convert(response);
 
             cache.put(coordinates, location);
 

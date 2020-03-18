@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Address {
-    @JsonProperty("Components")
-    private List<ComponentsItem> components;
     @JsonProperty("country_code")
     private String countryCode;
     @JsonProperty("postal_code")
