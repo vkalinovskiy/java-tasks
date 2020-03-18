@@ -2,7 +2,6 @@ package com.tasks.yandexgeocoder;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Objects;
 
 public class Coordinates {
     public final double latitude;
