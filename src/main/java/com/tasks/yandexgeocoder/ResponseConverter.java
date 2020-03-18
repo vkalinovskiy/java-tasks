@@ -4,50 +4,17 @@ import com.tasks.yandexgeocoder.responsestructure.Address;
 import com.tasks.yandexgeocoder.responsestructure.GeocoderResponse;
 
 public class ResponseConverter {
-    protected GeocoderResponse geocoderResponse;
-    protected Location location = new Location();
-    protected String countryCode;
-    protected Integer postalCode;
-    protected String country;
-    protected String province;
-    protected String city;
-    protected String street;
-    protected String house;
+    public Location convert(GeocoderResponse response) {
+        Address address = response.getAddress();
 
-    public ResponseConverter(GeocoderResponse geocoderResponse) {
-        this.geocoderResponse = geocoderResponse;
-    }
-
-    public void setResponse(GeocoderResponse geocoderResponse) {
-        this.geocoderResponse = geocoderResponse;
-    }
-
-    public Location convert() {
-        extractDataFromResponse();
-        setDataToLocation();
-
-        return location;
-    }
-
-    protected void extractDataFromResponse() {
-        Address address = geocoderResponse.getAddress();
-
-        countryCode = address.getCountryCode();
-        postalCode = address.getPostalCode();
-        country = address.getCountry();
-        province = address.getProvince();
-        city = address.getCity();
-        street = address.getStreet();
-        house = address.getHouse();
-    }
-
-    protected void setDataToLocation() {
-        location.setCountryCode(countryCode);
-        location.setPostalCode(postalCode);
-        location.setCountry(country);
-        location.setProvince(province);
-        location.setCity(city);
-        location.setStreet(street);
-        location.setHouse(house);
+        return new Location(
+            address.getCountryCode(),
+            address.getCountry(),
+            address.getProvince(),
+            address.getCity(),
+            address.getStreet(),
+            address.getHouse(),
+            address.getPostalCode()
+        );
     }
 }

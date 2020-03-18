@@ -9,6 +9,21 @@ public class Location {
     protected String house;
     protected Integer postalCode;
 
+    public Location() {
+
+    }
+
+    public Location(String countryCode, String country, String province,
+                    String city, String street, String house, Integer postalCode) {
+        this.countryCode = countryCode;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.street = street;
+        this.house = house;
+        this.postalCode = postalCode;
+    }
+
     public String getCountryCode() {
         return countryCode;
     }
