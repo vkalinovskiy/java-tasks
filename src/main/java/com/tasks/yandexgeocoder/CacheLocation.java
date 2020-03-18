@@ -6,7 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import java.util.concurrent.TimeUnit;
 
 public class CacheLocation {
-    protected Cache<Integer, Location> cache;
+    protected Cache<String, Location> cache;
 
     public CacheLocation() {
         createCache();
@@ -21,10 +21,10 @@ public class CacheLocation {
     }
 
     public void put(Coordinates coordinates, Location location) {
-        cache.put(coordinates.hashCode(), location);
+        cache.put(coordinates.getCacheKey(), location);
     }
 
     public Location get(Coordinates coordinates) {
-        return cache.getIfPresent(coordinates.hashCode());
+        return cache.getIfPresent(coordinates.getCacheKey());
     }
 }

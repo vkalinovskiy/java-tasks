@@ -22,7 +22,7 @@ public class Geocoder {
         if (location == null) {
             location = getFromApi(coordinates);
         }
-        
+
         return location;
     }
 
