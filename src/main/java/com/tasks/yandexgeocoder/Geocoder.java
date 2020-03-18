@@ -20,7 +20,10 @@ public class Geocoder {
         location = getFromCache(coordinates);
 
         if (location == null) {
+            System.out.println("Get from api");
             location = getFromApi(coordinates);
+        } else {
+            System.out.println("Get from cache");
         }
 
         return location;

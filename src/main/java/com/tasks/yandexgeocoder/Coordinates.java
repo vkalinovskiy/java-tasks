@@ -1,5 +1,6 @@
 package com.tasks.yandexgeocoder;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ public class Coordinates {
     @Override
     public int hashCode() {
         DecimalFormat df = new DecimalFormat("#.####");
+        df.setRoundingMode(RoundingMode.CEILING);
 
         return Objects.hash(df.format(latitude), df.format(longitude));
     }
