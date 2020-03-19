@@ -23,17 +23,14 @@ class GeocoderTest {
         assertEquals("Омск", location.getCity());
         assertEquals("Ильинская улица", location.getStreet());
         assertEquals("4", location.getHouse());
+    }
 
-        coordinates = new Coordinates(73.374411, 54.979811);
+    @Test
+    void cacheKeysShouldEquals() {
+        Coordinates coordinates1 = new Coordinates(73.374437, 54.979878);
 
-        location = ya.getLocation(coordinates);
+        Coordinates coordinates2 = new Coordinates(73.374411, 54.979811);
 
-        assertEquals("RU", location.getCountryCode());
-        assertEquals(644024, location.getPostalCode());
-        assertEquals("Россия", location.getCountry());
-        assertEquals("Омская область", location.getProvince());
-        assertEquals("Омск", location.getCity());
-        assertEquals("Ильинская улица", location.getStreet());
-        assertEquals("4", location.getHouse());
+        assertEquals(coordinates1.getCacheKey(), coordinates2.getCacheKey());
     }
 }
