@@ -18,7 +18,7 @@ public class Geocoder {
     public Geocoder(String apiKey) {
         this.apiKey = apiKey;
         cache = new CacheLocation();
-        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
