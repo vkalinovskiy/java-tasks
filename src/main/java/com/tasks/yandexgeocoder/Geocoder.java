@@ -15,9 +15,7 @@ public class Geocoder {
     }
 
     public Location getLocation(Coordinates coordinates) {
-        Location location;
-
-        location = getFromCache(coordinates);
+        Location location = getFromCache(coordinates);
 
         if (location == null) {
             location = getFromApi(coordinates);
