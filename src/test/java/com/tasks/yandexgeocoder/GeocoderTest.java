@@ -8,9 +8,7 @@ class GeocoderTest {
 
     @Test
     void addressesShouldEquals() {
-        Geocoder ya = new Geocoder.Builder()
-                .setApiKey("020ce9a8-6dbe-49fd-8705-1178fa1e2b47")
-                .build();
+        Geocoder ya = new Geocoder("020ce9a8-6dbe-49fd-8705-1178fa1e2b47");
 
         Coordinates coordinates = new Coordinates(73.374437, 54.979878);
 
