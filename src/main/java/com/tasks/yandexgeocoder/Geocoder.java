@@ -3,13 +3,11 @@ package com.tasks.yandexgeocoder;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tasks.yandexgeocoder.responsestructure.GeocoderResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.net.URL;
 
 @RequiredArgsConstructor
-@NonNull
 public class Geocoder {
     protected String apiKey;
     protected CacheLocation cache;
