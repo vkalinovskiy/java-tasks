@@ -9,16 +9,25 @@ import java.net.URL;
 public class Geocoder {
     protected String apiKey;
     protected CacheLocation cache;
+    protected ObjectMapper objectMapper;
 
-    public Geocoder() {
+    public Geocoder(String apiKey) {
+        if (apiKey == null) {
+            throw new IllegalArgumentException("apiKey is required!");
+        }
+
+        this.apiKey = apiKey;
         cache = new CacheLocation();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public Location getLocation(Coordinates coordinates) {
-        Location location = getFromCache(coordinates);
+        Location location = cache.get(coordinates);
 
         if (location == null) {
             location = getFromApi(coordinates);
+            cache.put(coordinates, location);
         }
 
         return location;
@@ -29,40 +38,13 @@ public class Geocoder {
             URL url = new URL("https://geocode-maps.yandex.ru/1.x/?apikey="
                     + apiKey + "&geocode=" + coordinates + "&results=1&format=json");
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             GeocoderResponse response = objectMapper.readValue(url, GeocoderResponse.class);
 
             Location location = new ResponseConverter().convert(response);
 
-            cache.put(coordinates, location);
-
             return location;
         } catch (Exception exception) {
             throw new RuntimeException("Error in request to Yandex API");
-        }
-
-    }
-
-    protected Location getFromCache(Coordinates coordinates) {
-        return cache.get(coordinates);
-    }
-
-    public static class Builder {
-        Geocoder geocoder;
-
-        Builder() {
-            geocoder = new Geocoder();
-        }
-
-        public Builder setApiKey(String apiKey) {
-            geocoder.apiKey = apiKey;
-
-            return this;
-        }
-
-        public Geocoder build() {
-            return geocoder;
         }
     }
 }
