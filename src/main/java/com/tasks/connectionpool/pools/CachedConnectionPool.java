@@ -12,7 +12,8 @@ public class CachedConnectionPool implements ConnectionPool {
     protected Integer maxConnectionsSize;
     protected AtomicInteger currentConnectionsSize = new AtomicInteger(0);
 
-    public CachedConnectionPool(ConnectionFactory factory, Integer initialSize, Integer maxSize) throws SQLException, ClassNotFoundException {
+    public CachedConnectionPool(ConnectionFactory factory, Integer initialSize, Integer maxSize)
+            throws SQLException, ClassNotFoundException {
         this.factory = factory;
         this.initialConnectionsSize = initialSize;
         this.maxConnectionsSize = maxSize;
@@ -33,8 +34,8 @@ public class CachedConnectionPool implements ConnectionPool {
     public Connection getConnection() throws SQLException, ClassNotFoundException {
         Connection connection = connectionsQueue.poll();
 
-        if(connection == null) {
-            if(currentConnectionsSize.get() < maxConnectionsSize) {
+        if (connection == null) {
+            if (currentConnectionsSize.get() < maxConnectionsSize) {
                 connection = createConnection();
             } else {
                 throw new RuntimeException("No available connections!");
@@ -45,17 +46,17 @@ public class CachedConnectionPool implements ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
-        if(connection == null) {
+        if (connection == null) {
             throw new UnsupportedOperationException("Connection cannot be null");
         }
 
-        if(connectionsQueue.size() >= initialConnectionsSize) {
+        if (connectionsQueue.size() >= initialConnectionsSize) {
             connection.close();
             currentConnectionsSize.decrementAndGet();
             return;
         }
 
-        if(connection.isClosed()) {
+        if (connection.isClosed()) {
             connection = factory.getConnection();
         }
 

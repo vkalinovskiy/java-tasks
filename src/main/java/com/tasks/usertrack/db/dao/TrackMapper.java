@@ -11,5 +11,6 @@ public interface TrackMapper {
 
     List<Track> getByUserId(int id);
 
-    List<Track> selectByUserAndTimePeriod(@Param("userId") int userId, @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+    List<Track> selectByUserAndTimePeriod(@Param("userId") int userId,
+                                          @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
 }

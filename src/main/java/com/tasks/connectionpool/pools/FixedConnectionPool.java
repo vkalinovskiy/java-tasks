@@ -1,6 +1,7 @@
 package com.tasks.connectionpool.pools;
 
 import com.tasks.connectionpool.ConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -10,7 +11,8 @@ public class FixedConnectionPool implements ConnectionPool {
     protected ConcurrentLinkedQueue<Connection> connectionsQueue = new ConcurrentLinkedQueue<>();
     protected Integer limitSize;
 
-    public FixedConnectionPool(ConnectionFactory factory, Integer limitConnections) throws SQLException, ClassNotFoundException {
+    public FixedConnectionPool(ConnectionFactory factory, Integer limitConnections)
+            throws SQLException, ClassNotFoundException {
         this.factory = factory;
         limitSize = limitConnections;
         createConnections(limitConnections);
@@ -25,8 +27,8 @@ public class FixedConnectionPool implements ConnectionPool {
 
     public Connection getConnection() {
         Connection connection = connectionsQueue.poll();
-        
-        if(connection == null) {
+
+        if (connection == null) {
             throw new RuntimeException("No available connections!");
         }
 
@@ -34,16 +36,16 @@ public class FixedConnectionPool implements ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException, ClassNotFoundException {
-        if(connection == null) {
+        if (connection == null) {
             throw new UnsupportedOperationException("Connection cannot be null");
         }
 
-        if(connectionsQueue.size() >= limitSize) {
+        if (connectionsQueue.size() >= limitSize) {
             connection.close();
             return;
         }
 
-        if(connection.isClosed()) {
+        if (connection.isClosed()) {
             connection = factory.getConnection();
         }
 
