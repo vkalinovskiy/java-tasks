@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springusertrack.dao.TrackMapper">
+    <resultMap id="track" type="com.springusertrack.model.Track">
+        <result column="lat" jdbcType="DECIMAL" property="lat"/>
+        <result column="lng" jdbcType="DECIMAL" property="lng"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <association
+            property="trackLocation"
+            column="track_location_id"
+            javaType="com.springusertrack.model.TrackLocation"
+            select="com.springusertrack.dao.TrackLocationMapper.getById"
+            fetchType="eager" />
+    </resultMap>
+    <select id="getByUserId" resultMap="track" parameterType="java.lang.Integer">
+        SELECT *
+        FROM user_track_spring.track
+        WHERE user_id = #{id}
+    </select>
+    <select id="selectByUserAndTimePeriod"
+            resultType="com.springusertrack.model.Track"
+            resultMap="track">
+        SELECT * FROM user_track_spring.track WHERE user_id = #{userId}
+        <if test="dateFrom != null">
+            AND created_at >= #{dateFrom,jdbcType=TIMESTAMP}
+        </if>
+        <if test="dateTo != null">
+            AND #{dateTo,jdbcType=TIMESTAMP} >= created_at
+        </if>
+    </select>
+    <insert id="insert" parameterType="com.springusertrack.model.Track"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+    >
+        INSERT INTO user_track_spring.track
+            (lat, lng, user_id, track_location_id)
+        VALUES (#{lat}, #{lng}, #{userId}, #{trackLocationId})
+    </insert>
+</mapper>

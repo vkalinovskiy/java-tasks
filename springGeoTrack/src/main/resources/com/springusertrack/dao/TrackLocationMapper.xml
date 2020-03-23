@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springusertrack.dao.TrackLocationMapper">
+    <resultMap type="com.springusertrack.model.TrackLocation" id="TrackLocationResult">
+        <id property="id" column="id"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="house" column="house"/>
+        <result property="postalCode" column="postal_code"/>
+    </resultMap>
+    <select id="getById" resultMap="TrackLocationResult" parameterType="java.lang.Integer">
+        SELECT *
+        FROM user_track_spring.track_location
+        WHERE id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.springusertrack.model.TrackLocation"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+            INSERT INTO user_track_spring.track_location
+            (country_code, country, province, city, street, house, postal_code)
+            VALUES (#{countryCode}, #{country}, #{province},
+            #{city}, #{street}, #{house}, #{postalCode})
+    </insert>
+</mapper>
