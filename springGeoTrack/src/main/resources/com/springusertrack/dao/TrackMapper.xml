@@ -6,6 +6,7 @@
         <result column="lng" jdbcType="DECIMAL" property="lng"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="track_location_id" jdbcType="INTEGER" property="trackLocationId"/>
         <association
             property="trackLocation"
             column="track_location_id"

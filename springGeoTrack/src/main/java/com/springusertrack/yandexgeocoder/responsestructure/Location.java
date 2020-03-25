@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Address {
+public class Location {
     @JsonProperty("country_code")
     private String countryCode;
     @JsonProperty("postal_code")
@@ -15,7 +15,7 @@ public class Address {
     private Map<String, String> details;
 
     @JsonCreator
-    public Address(@JsonProperty("Components") List<ComponentsItem> components) {
+    public Location(@JsonProperty("Components") List<ComponentsItem> components) {
         details = components.stream()
                 .collect(Collectors.toMap(ComponentsItem::getKind, ComponentsItem::getName, (name1, name2) -> name2));
     }

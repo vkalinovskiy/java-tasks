@@ -1,8 +1,11 @@
 package com.springusertrack.controller;
 
+import com.springusertrack.converter.TrackDtoConverter;
+import com.springusertrack.dto.TrackDto;
 import com.springusertrack.model.Track;
 import com.springusertrack.service.track.TrackService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -12,22 +15,28 @@ import java.util.List;
 @RequestMapping("tracks")
 public class TrackController {
     private final TrackService trackService;
+    private final TrackDtoConverter trackDtoConverter;
 
-    public TrackController(TrackService trackService) {
+    public TrackController(TrackService trackService, TrackDtoConverter trackDtoConverter) {
         this.trackService = trackService;
+        this.trackDtoConverter = trackDtoConverter;
     }
 
-    @PostMapping("")
-    public Track create(@RequestBody Track track) {
-        return trackService.insertWithLocation(track);
+    @PostMapping
+    public TrackDto create(@Validated @RequestBody TrackDto dto) {
+        Track track = trackDtoConverter.convertToEntity(dto);
+        track = trackService.insertWithLocation(track);
+
+        return trackDtoConverter.convertToDto(track);
     }
 
     @GetMapping("/users/{id}")
-    public List<Track> getByUser(@PathVariable int id,
+    public List<TrackDto> getByUser(@PathVariable int id,
                                  @RequestParam(required=false, name="date_from")
-                                 @DateTimeFormat(pattern="yyyy-MM-dd") LocalDateTime dateFrom,
+                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
                                  @RequestParam(required=false, name="date_to")
-                                 @DateTimeFormat(pattern="yyyy-MM-dd") LocalDateTime dateTo) {
-        return trackService.selectByUserAndTimePeriod(id, dateFrom, dateTo);
+                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) {
+        List<Track> trackList = trackService.selectByUserAndTimePeriod(id, dateFrom, dateTo);
+        return trackDtoConverter.convertToDtoList(trackList);
     }
 }

@@ -1,11 +1,15 @@
-package com.springusertrack.yandexgeocoder;
+package com.springusertrack.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
-@AllArgsConstructor
-public class Location {
+public class TrackDto {
+    @NotNull
+    private double lat;
+    @NotNull
+    private double lng;
     protected String countryCode;
     protected String country;
     protected String province;
@@ -13,4 +17,5 @@ public class Location {
     protected String street;
     protected String house;
     protected Integer postalCode;
+    protected Integer userId;
 }

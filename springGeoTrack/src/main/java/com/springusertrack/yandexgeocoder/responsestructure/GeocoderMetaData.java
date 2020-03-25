@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class GeocoderMetaData {
     @JsonProperty("Address")
-    private Address address;
+    private Location location;
 
-    public Address getAddress() {
-        return address;
+    public Location getLocation() {
+        return location;
     }
 }

@@ -6,13 +6,13 @@ public class GeocoderResponse {
     @JsonProperty("response")
     private Response response;
 
-    public Address getAddress() {
+    public Location getLocation() {
         return response
                 .getGeoObjectCollection()
                 .getFeatureMember()
                 .getGeoObject()
                 .getMetaDataProperty()
                 .getGeocoderMetaData()
-                .getAddress();
+                .getLocation();
     }
 }
