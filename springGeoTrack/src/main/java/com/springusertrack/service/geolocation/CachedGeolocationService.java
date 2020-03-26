@@ -14,12 +14,12 @@ import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class CachedGeolocation implements GeolocationInterface {
+public class CachedGeolocationService implements GeolocationInterface {
     protected CacheLocation cache;
     protected Geocoder geocoder;
 
     @Autowired
-    public CachedGeolocation(Geocoder geocoder) {
+    public CachedGeolocationService(Geocoder geocoder) {
         this.geocoder = geocoder;
         cache = new CacheLocation();
     }

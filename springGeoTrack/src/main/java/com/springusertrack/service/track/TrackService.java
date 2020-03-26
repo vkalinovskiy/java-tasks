@@ -4,7 +4,7 @@ import com.springusertrack.dao.TrackLocationMapper;
 import com.springusertrack.dao.TrackMapper;
 import com.springusertrack.model.Track;
 import com.springusertrack.model.TrackLocation;
-import com.springusertrack.service.geolocation.YandexGeolocation;
+import com.springusertrack.service.geolocation.YandexGeolocationService;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,13 @@ import java.util.List;
 
 @Service
 public class TrackService {
-    protected YandexGeolocation geolocation;
+    protected YandexGeolocationService geolocation;
     protected TrackMapper trackMapper;
     protected TrackLocationMapper trackLocationMapper;
     private static final Logger logger = LoggerFactory.getLogger(TrackService.class);
 
     @Autowired
-    public TrackService(YandexGeolocation geolocation, TrackMapper trackMapper, TrackLocationMapper trackLocationMapper) {
+    public TrackService(YandexGeolocationService geolocation, TrackMapper trackMapper, TrackLocationMapper trackLocationMapper) {
         this.geolocation = geolocation;
         this.trackMapper = trackMapper;
         this.trackLocationMapper = trackLocationMapper;

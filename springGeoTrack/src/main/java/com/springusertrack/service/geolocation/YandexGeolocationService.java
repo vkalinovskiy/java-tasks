@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class YandexGeolocation implements GeolocationInterface {
+public class YandexGeolocationService implements GeolocationInterface {
     protected Geocoder geocoder;
 
     @Autowired
-    public YandexGeolocation(Geocoder geocoder) {
+    public YandexGeolocationService(Geocoder geocoder) {
         this.geocoder = geocoder;
     }
 
