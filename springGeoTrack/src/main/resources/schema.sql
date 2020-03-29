@@ -1,41 +1,30 @@
-SET FOREIGN_KEY_CHECKS=0;
+create table if not exists tbl_user(
+  id SERIAL PRIMARY KEY,
+  name text NOT NULL,
+  email text NOT NULL
+);
 
-DROP TABLE IF EXISTS `track`;
-DROP TABLE IF EXISTS `track_location`;
-DROP TABLE IF EXISTS `user`;
-
-SET FOREIGN_KEY_CHECKS=1;
-
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `track_location` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `country_code` varchar(255) DEFAULT NULL,
-  `country` varchar(255) DEFAULT NULL,
-  `province` varchar(255) DEFAULT NULL,
-  `city` varchar(255) DEFAULT NULL,
-  `street` varchar(255) DEFAULT NULL,
-  `house` varchar(255) DEFAULT NULL,
-  `postal_code` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create table if not exists track_location(
+  id serial NOT NULL PRIMARY KEY,
+  country_code text DEFAULT NULL,
+  country text DEFAULT NULL,
+  province text DEFAULT NULL,
+  city text DEFAULT NULL,
+  street text DEFAULT NULL,
+  house text DEFAULT NULL,
+  postal_code int4 DEFAULT NULL
+);
 
 
-CREATE TABLE `track` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `lat` decimal(9,6) NOT NULL,
-  `lng` decimal(9,6) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `user_id` int(11) NOT NULL,
-  `track_location_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `track_user_id_fk` (`user_id`),
-  KEY `track_track_location_id_fk` (`track_location_id`),
-  CONSTRAINT `track_track_location_id_fk` FOREIGN KEY (`track_location_id`) REFERENCES `track_location` (`id`),
-  CONSTRAINT `track_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+create table if not exists track(
+  id serial NOT NULL PRIMARY KEY,
+  lat numeric(9,6) NOT NULL,
+  lng numeric(9,6) NOT NULL,
+  created_at timestamp not null default CURRENT_TIMESTAMP,
+  user_id int4 NOT NULL,
+  track_location_id int4 DEFAULT NULL
+--  KEY track_user_id_fk (user_id),
+--  KEY track_track_location_id_fk (track_location_id),
+--  CONSTRAINT track_track_location_id_fk FOREIGN KEY (track_location_id) REFERENCES track_location (id),
+--  CONSTRAINT track_user_id_fk FOREIGN KEY (user_id) REFERENCES user (id)
+);

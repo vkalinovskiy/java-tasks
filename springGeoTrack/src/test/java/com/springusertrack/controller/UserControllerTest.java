@@ -1,76 +1,143 @@
 package com.springusertrack.controller;
 
-import com.springusertrack.service.track.TrackService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springusertrack.dto.UserDto;
+import lombok.SneakyThrows;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.MySQLContainer;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import utils.GeoTrackMySQLContainer;
 
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(initializers = {UserControllerTest.Initializer.class})
-@SpringBootTest
+@ContextConfiguration(initializers = {GeoTrackMySQLContainer.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 public class UserControllerTest {
     @Autowired
-    TrackService trackService;
-
-    @ClassRule
-    public static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:5.7.29")
-            .withDatabaseName("user_track_spring")
-            .withUsername("root")
-            .withPassword("root");
+    private MockMvc mvc;
+    private ObjectMapper objectMapper;
 
     @Before
     public void setUp() {
-
+        objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @Test
-    public void index() {
-        List<?> tracks = trackService.selectByUserAndTimePeriod(1, null, null);
+    @SneakyThrows
+    public void indexRequestShouldReturnTwoUsers() {
+        String resultJson = mvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-        assertEquals(1, tracks.size());
+        List<UserDto> users = objectMapper.readValue(resultJson, new TypeReference<List<UserDto>>() {});
+
+        assertEquals(2, users.size());
     }
 
     @Test
-    public void get() {
+    @SneakyThrows
+    public void getRequestShouldReturnFirstUser() {
+        String resultJson = mvc.perform(get("/users/1"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        UserDto user = objectMapper.readValue(resultJson, UserDto.class);
+
+        assertEquals(1, user.getId());
+        assertEquals("first user", user.getName());
+        assertEquals("first@mail.com", user.getEmail());
     }
 
     @Test
-    public void create() {
+    @SneakyThrows
+    public void createRequestShouldCreteNewUser() {
+        UserDto userDtoRequest = new UserDto();
+        userDtoRequest.setName("test user");
+        userDtoRequest.setEmail("test@test.test");
+
+        String userDtoJson = objectMapper.writeValueAsString(userDtoRequest);
+
+        String resultJson = mvc.perform(MockMvcRequestBuilders
+                .post("/users/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userDtoJson))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        UserDto userDtoResponse = objectMapper.readValue(resultJson, UserDto.class);
+
+        assertNotNull(userDtoResponse.getId());
+        assertEquals(userDtoRequest.getName(), userDtoResponse.getName());
+        assertEquals(userDtoRequest.getEmail(), userDtoResponse.getEmail());
     }
 
     @Test
-    public void update() {
+    @SneakyThrows
+    public void updateRequestShouldUpdateExistUser() {
+        UserDto userDtoRequest = new UserDto();
+        userDtoRequest.setId(2);
+        userDtoRequest.setName("changed user");
+        userDtoRequest.setEmail("changed@mail.com");
+
+        String userDtoJson = objectMapper.writeValueAsString(userDtoRequest);
+
+        mvc.perform(MockMvcRequestBuilders
+                .put("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userDtoJson))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String resultJson = mvc.perform(get("/users/2"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        UserDto userDtoResponse = objectMapper.readValue(resultJson, UserDto.class);
+
+        assertEquals(userDtoRequest.getId(), userDtoResponse.getId());
+        assertEquals(userDtoRequest.getName(), userDtoResponse.getName());
+        assertEquals(userDtoRequest.getEmail(), userDtoResponse.getEmail());
     }
 
     @Test
-    public void delete() {
-    }
+    @SneakyThrows
+    public void deleteRequestShouldDeleteUser() {
+        mvc.perform(delete("/users/1"))
+                .andExpect(status().isOk());
 
-
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        @Override
-        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            TestPropertyValues
-                    .of("spring.datasource.url=" + mysql.getJdbcUrl(),
-                            "spring.datasource.username=" + mysql.getUsername(),
-                            "spring.datasource.password=" + mysql.getPassword())
-                    .applyTo(configurableApplicationContext.getEnvironment());
-        }
-
+        mvc.perform(get("/users/1"))
+                .andExpect(status().isNotFound());
     }
 }

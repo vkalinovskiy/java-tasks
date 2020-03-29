@@ -30,13 +30,13 @@ public class TrackController {
         return trackDtoConverter.convertToDto(track);
     }
 
-    @GetMapping("/users/{id}")
-    public List<TrackDto> getByUser(@PathVariable int id,
+    @GetMapping
+    public List<TrackDto> getByUser(@RequestParam(name="user_id") int user_id,
                                  @RequestParam(required=false, name="date_from")
                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateFrom,
                                  @RequestParam(required=false, name="date_to")
                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTo) {
-        List<Track> trackList = trackService.selectByUserAndTimePeriod(id, dateFrom, dateTo);
+        List<Track> trackList = trackService.selectByUserAndTimePeriod(user_id, dateFrom, dateTo);
         return trackDtoConverter.convertToDtoList(trackList);
     }
 }

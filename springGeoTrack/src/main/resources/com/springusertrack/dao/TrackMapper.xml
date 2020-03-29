@@ -16,13 +16,13 @@
     </resultMap>
     <select id="getByUserId" resultMap="track" parameterType="java.lang.Integer">
         SELECT *
-        FROM user_track_spring.track
+        FROM track
         WHERE user_id = #{id}
     </select>
     <select id="selectByUserAndTimePeriod"
             resultType="com.springusertrack.model.Track"
             resultMap="track">
-        SELECT * FROM user_track_spring.track WHERE user_id = #{userId}
+        SELECT * FROM track WHERE user_id = #{userId}
         <if test="dateFrom != null">
             AND created_at >= #{dateFrom,jdbcType=TIMESTAMP}
         </if>
@@ -33,7 +33,7 @@
     <insert id="insert" parameterType="com.springusertrack.model.Track"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id"
     >
-        INSERT INTO user_track_spring.track
+        INSERT INTO track
             (lat, lng, user_id, track_location_id)
         VALUES (#{lat}, #{lng}, #{userId}, #{trackLocationId})
     </insert>

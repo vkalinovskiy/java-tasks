@@ -12,12 +12,12 @@
     </resultMap>
     <select id="getById" resultMap="TrackLocationResult" parameterType="java.lang.Integer">
         SELECT *
-        FROM user_track_spring.track_location
+        FROM track_location
         WHERE id = #{id}
     </select>
     <insert id="insert" parameterType="com.springusertrack.model.TrackLocation"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-            INSERT INTO user_track_spring.track_location
+            INSERT INTO track_location
             (country_code, country, province, city, street, house, postal_code)
             VALUES (#{countryCode}, #{country}, #{province},
             #{city}, #{street}, #{house}, #{postalCode})

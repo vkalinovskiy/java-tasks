@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springusertrack.dao.UserMapper">
-    <resultMap id="user" type="com.springusertrack.model.User">
+    <resultMap id="tbl_user" type="com.springusertrack.model.User">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="email" column="email"/>
@@ -14,21 +14,21 @@
                 fetchType="eager"
         />
     </resultMap>
-    <select id="selectAll" resultType="com.springusertrack.model.User" resultMap="user">
-        SELECT * FROM user_track_spring.user
+    <select id="selectAll" resultType="com.springusertrack.model.User" resultMap="tbl_user">
+        SELECT * FROM tbl_user
     </select>
-    <select id="selectById" resultType="com.springusertrack.model.User" resultMap="user">
-        SELECT * FROM user_track_spring.user WHERE id = #{id}
+    <select id="selectById" resultType="com.springusertrack.model.User" resultMap="tbl_user">
+        SELECT * FROM tbl_user WHERE id = #{id}
     </select>
     <insert id="insert" parameterType="com.springusertrack.model.User"
             useGeneratedKeys="true" keyProperty="id" keyColumn="id"
     >
-        INSERT INTO user_track_spring.user
+        INSERT INTO tbl_user
             (name, email)
         VALUES (#{name}, #{email})
     </insert>
     <update id="update" parameterType="com.springusertrack.model.User">
-        UPDATE user_track_spring.user
+        UPDATE tbl_user
         SET name = #{name}, email = #{email}
         WHERE id = #{id}
     </update>
@@ -37,7 +37,7 @@
         WHERE id = #{id}
     </delete>
     <delete id="deleteById">
-        DELETE FROM user_track_spring.user
+        DELETE FROM tbl_user
         WHERE id = #{id}
     </delete>
 </mapper>

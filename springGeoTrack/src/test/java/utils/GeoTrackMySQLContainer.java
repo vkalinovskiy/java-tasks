@@ -1,31 +1,29 @@
 package utils;
 
-import org.testcontainers.containers.MySQLContainer;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.testcontainers.containers.PostgreSQLContainer;
 
-public class GeoTrackMySQLContainer extends MySQLContainer<GeoTrackMySQLContainer> {
+public class GeoTrackMySQLContainer extends PostgreSQLContainer<GeoTrackMySQLContainer> implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-    private static final String IMAGE_VERSION = "mysql:5.8";
+    private static final String IMAGE_VERSION = "postgres:10";
 
-    private static GeoTrackMySQLContainer container;
+    private static GeoTrackMySQLContainer container = new GeoTrackMySQLContainer()
+            .withDatabaseName("user_track_spring")
+            .withUsername("root")
+            .withPassword("root");
 
     private GeoTrackMySQLContainer() {
         super(IMAGE_VERSION);
     }
 
-    public static GeoTrackMySQLContainer getInstance() {
-        if (container == null) {
-            container = new GeoTrackMySQLContainer();
-        }
-        return container;
-    }
-
     @Override
-    public void start() {
-        super.start();
-    }
-
-    @Override
-    public void stop() {
-        //do nothing, JVM handles shut down
+    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+        container.start();
+        System.setProperty("spring.datasource.jdbc-url", container.getJdbcUrl());
+        System.setProperty("spring.datasource.username", container.getUsername());
+        System.setProperty("spring.datasource.password", container.getPassword());
     }
 }
+
