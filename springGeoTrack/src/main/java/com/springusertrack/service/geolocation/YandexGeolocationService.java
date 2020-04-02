@@ -7,7 +7,7 @@ import com.springusertrack.yandexgeocoder.responsestructure.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("yandexGeolocationService")
 public class YandexGeolocationService implements GeolocationInterface {
     protected Geocoder geocoder;
 

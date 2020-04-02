@@ -13,7 +13,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
 
-@Service
+@Service("cachedGeolocationService")
 public class CachedGeolocationService implements GeolocationInterface {
     protected CacheLocation cache;
     protected Geocoder geocoder;

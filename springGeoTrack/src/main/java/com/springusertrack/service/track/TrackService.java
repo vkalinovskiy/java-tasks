@@ -4,10 +4,12 @@ import com.springusertrack.dao.TrackLocationMapper;
 import com.springusertrack.dao.TrackMapper;
 import com.springusertrack.model.Track;
 import com.springusertrack.model.TrackLocation;
+import com.springusertrack.service.geolocation.GeolocationInterface;
 import com.springusertrack.service.geolocation.YandexGeolocationService;
 import org.mybatis.logging.Logger;
 import org.mybatis.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,7 +17,8 @@ import java.util.List;
 
 @Service
 public class TrackService {
-    protected YandexGeolocationService geolocation;
+    @Qualifier("yandexGeolocationService")
+    protected GeolocationInterface geolocation;
     protected TrackMapper trackMapper;
     protected TrackLocationMapper trackLocationMapper;
     private static final Logger logger = LoggerFactory.getLogger(TrackService.class);
